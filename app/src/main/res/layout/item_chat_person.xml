@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:text="Username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/username"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/ava"
+        android:layout_marginLeft="8dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        app:srcCompat="@drawable/common_google_signin_btn_icon_dark_pressed"
+        android:id="@+id/ava"
+        android:layout_width="60dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:text="time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/time"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/username" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastMes"
+        app:layout_constraintLeft_toLeftOf="@+id/username"
+        app:layout_constraintBottom_toBottomOf="@+id/ava"
+        android:layout_marginBottom="8dp" />
+</android.support.constraint.ConstraintLayout>

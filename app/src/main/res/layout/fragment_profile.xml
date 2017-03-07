@@ -1,0 +1,134 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.yesat.yesat.takebs.Fragment.ProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pro_about"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/pro_name"
+        app:layout_constraintLeft_toLeftOf="@+id/pro_name" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal"
+        android:id="@+id/pro_ava"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pro_name"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintLeft_toRightOf="@+id/pro_ava"
+        android:layout_marginLeft="24dp"
+        app:layout_constraintTop_toTopOf="@+id/pro_ava" />
+    <View
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:id="@+id/view3"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/pro_ava"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:text="Country :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView10"
+        android:textSize="18sp"
+        android:textColor="@color/common_google_signin_btn_text_light_focused"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintLeft_toLeftOf="@+id/textView17" />
+
+    <TextView
+        android:text="DOB :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView12"
+        android:textSize="18sp"
+        android:textColor="@color/common_google_signin_btn_text_light_focused"
+        app:layout_constraintLeft_toLeftOf="@+id/textView17"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <TextView
+        android:text="City :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView13"
+        android:textSize="18sp"
+        android:textColor="@color/common_google_signin_btn_text_light_focused"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintLeft_toLeftOf="@+id/textView17" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pro_email"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginStart="64dp"
+        app:layout_constraintLeft_toRightOf="@+id/textView17"
+        android:layout_marginLeft="64dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView17" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pro_dob"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintLeft_toLeftOf="@+id/pro_email"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pro_coun"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@+id/textView10"
+        app:layout_constraintLeft_toLeftOf="@+id/pro_dob" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pro_city"
+        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@+id/textView13"
+        app:layout_constraintLeft_toLeftOf="@+id/pro_coun" />
+
+    <TextView
+        android:text="Email :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView17"
+        android:textSize="18sp"
+        android:textColor="@color/common_google_signin_btn_text_light_focused"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintTop_toTopOf="@+id/view3"
+        android:layout_marginTop="32dp" />
+</android.support.constraint.ConstraintLayout>
