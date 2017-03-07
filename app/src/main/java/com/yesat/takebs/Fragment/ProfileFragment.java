@@ -19,8 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.yesat.yesat.takebs.R;
-import com.yesat.yesat.takebs.support.User;
+import com.yesat.takebs.R;
+import com.yesat.takebs.support.User;
 
 /**
  * A simple {@link Fragment} subclass.

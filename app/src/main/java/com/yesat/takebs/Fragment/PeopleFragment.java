@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yesat.yesat.takebs.R;
+import com.yesat.takebs.R;
 
 /**
  * A simple {@link Fragment} subclass.

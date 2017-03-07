@@ -26,9 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.yesat.yesat.takebs.R;
-import com.yesat.yesat.takebs.RouteActivity;
-import com.yesat.yesat.takebs.support.Route;
+import com.yesat.takebs.R;
+import com.yesat.takebs.RouteActivity;
+import com.yesat.takebs.support.Route;
 
 import java.util.ArrayList;
 import java.util.List;

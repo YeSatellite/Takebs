@@ -23,9 +23,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.yesat.yesat.takebs.R;
-import com.yesat.yesat.takebs.support.Route;
-import com.yesat.yesat.takebs.support.User;
+import com.yesat.takebs.R;
+import com.yesat.takebs.support.Route;
+import com.yesat.takebs.support.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -5,7 +5,7 @@
     android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yesat.yesat.takebs.SignUpActivity">
+    tools:context="com.yesat.takebs.SignUpActivity">
 
 
     <ScrollView

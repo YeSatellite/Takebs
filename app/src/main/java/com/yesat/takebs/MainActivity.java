@@ -18,12 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import com.yesat.yesat.takebs.Fragment.AddRouteFragment;
-import com.yesat.yesat.takebs.Fragment.ChatFragment;
-import com.yesat.yesat.takebs.Fragment.FavouritesFragment;
-import com.yesat.yesat.takebs.Fragment.ProfileFragment;
-import com.yesat.yesat.takebs.Fragment.RoutesFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.yesat.takebs.Fragment.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@
     android:id="@+id/activity_log_in"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yesat.yesat.takebs.LogInActivity" >
+    tools:context="com.yesat.takebs.LogInActivity" >
 
     <ImageView
         android:layout_width="100dp"
@@ -41,7 +41,7 @@
         android:layout_marginRight="20dp" />
 
     <TextView
-        android:text="@string/login_to_your_account"
+        android:text="login_to_your_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView3"
@@ -134,7 +134,7 @@
         android:layout_marginLeft="10dp" />
 
     <TextView
-        android:text="@string/create_account"
+        android:text="create_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_sign_in"

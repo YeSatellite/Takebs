@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="Routes"
+        android:icon="@drawable/routes"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:id="@+id/bnv_i1"/>
+    <item android:title="Favourites"
+        android:enabled="true"
+        android:icon="@drawable/favorites"
+        app:showAsAction="ifRoom"
+        android:id="@+id/bnv_i2" />
+    <item android:title="Add route"
+        android:enabled="true"
+        android:icon="@drawable/add"
+        app:showAsAction="ifRoom"
+        android:id="@+id/bnv_i3" />
+    <item android:title="Replies"
+        android:enabled="true"
+        android:icon="@drawable/replies"
+        app:showAsAction="ifRoom"
+        android:id="@+id/bnv_i4" />
+    <item android:title="Profile"
+        android:enabled="true"
+        android:icon="@drawable/profile"
+        app:showAsAction="ifRoom"
+        android:id="@+id/bnv_i5" />
+</menu>
