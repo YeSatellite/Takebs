@@ -87,6 +87,7 @@ public class RoutesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity(), RouteActivity.class);
                 i.putExtra("route",routes.get(position));
+                i.putExtra("fragment","routes");
                 startActivity(i);
             }
         });

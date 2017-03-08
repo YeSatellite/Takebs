@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,9 +22,11 @@ import com.yesat.takebs.support.Route;
 
 public class RouteActivity extends AppCompatActivity {
 
+    private static final String TAG = "yernar";
     private Route route;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    private String parrent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class RouteActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         route = (Route) getIntent().getSerializableExtra("route");
+        parrent = getIntent().getStringExtra("fragment");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
@@ -47,11 +51,16 @@ public class RouteActivity extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.big_ava);
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReferenceFromUrl(route.url);
-        Glide.with(RouteActivity.this)
-                .using(new FirebaseImageLoader())
-                .load(storageReference)
-                .into(imageView);
+        imageView.setImageResource(R.drawable.avatar);
+        try {
+            StorageReference storageReference = storage.getReferenceFromUrl(route.url);
+            Glide.with(RouteActivity.this)
+                    .using(new FirebaseImageLoader())
+                    .load(storageReference)
+                    .into(imageView);
+        }catch (Exception ex){
+            Log.e(TAG,ex.getMessage());
+        }
         findViewById(R.id.act_route_add_to_favo).
                 setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -79,6 +88,9 @@ public class RouteActivity extends AppCompatActivity {
                         builder.show();
                     }
                 });
+
+        if(parrent.equals("favourites"))
+            findViewById(R.id.act_route_add_to_favo).setVisibility(View.GONE);
 
     }
 

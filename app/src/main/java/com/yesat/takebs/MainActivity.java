@@ -1,8 +1,10 @@
 package com.yesat.takebs;
 
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
@@ -45,9 +47,14 @@ public class MainActivity extends AppCompatActivity {
         disableShiftMode(bottom);
         setupViewPager(viewPager);
 
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
                 if (prevMenuItem != null) {
                     prevMenuItem.setChecked(false);
                 }
@@ -58,11 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
                 bottom.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottom.getMenu().getItem(position);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
             }
 
             @Override

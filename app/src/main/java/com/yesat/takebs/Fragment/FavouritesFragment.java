@@ -16,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.yesat.takebs.R;
 import com.yesat.takebs.RouteActivity;
 import com.yesat.takebs.support.Route;
@@ -90,6 +87,7 @@ public class FavouritesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity(), RouteActivity.class);
                 i.putExtra("route",routes.get(position));
+                i.putExtra("fragment","favourites");
                 startActivity(i);
             }
         });
@@ -117,15 +115,7 @@ public class FavouritesFragment extends Fragment {
             ((TextView)convertView.findViewById(R.id.ro_time)).setText(route.time);
 
             ImageView imageView = (ImageView) convertView.findViewById(R.id.ro_ava);
-            try {
-                StorageReference storageReference = storage.getReferenceFromUrl(route.url);
-                Glide.with(FavouritesFragment.this)
-                        .using(new FirebaseImageLoader())
-                        .load(storageReference)
-                        .into(imageView);
-            }catch (IllegalArgumentException IAEx) {
-                Log.d(TAG, "no photo");
-            }
+            imageView.setVisibility(View.GONE);
             return convertView;
 
         }
