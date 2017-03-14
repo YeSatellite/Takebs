@@ -109,8 +109,8 @@ public class FavouritesFragment extends Fragment {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_route, parent, false);
             }
             ((TextView)convertView.findViewById(R.id.ro_username)).setText(route.username);
-            ((TextView)convertView.findViewById(R.id.ro_from)).setText(route.fromCity+", "+route.fromCountry);
-            ((TextView)convertView.findViewById(R.id.ro_to)).setText(route.toCity+", "+route.toCountry);
+            ((TextView)convertView.findViewById(R.id.ro_from)).setText(route.fromCity);
+            ((TextView)convertView.findViewById(R.id.ro_to)).setText(route.toCity);
             ((TextView)convertView.findViewById(R.id.ro_date)).setText(route.date);
             ((TextView)convertView.findViewById(R.id.ro_time)).setText(route.time);
 

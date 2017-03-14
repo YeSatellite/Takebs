@@ -1,9 +1,13 @@
 package com.yesat.takebs.Fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.yesat.takebs.MainActivity;
 import com.yesat.takebs.R;
+import com.yesat.takebs.SettingActivity;
 import com.yesat.takebs.support.User;
 
 /**
@@ -43,6 +49,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        setHasOptionsMenu(true);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -67,10 +74,15 @@ public class ProfileFragment extends Fragment {
                 ImageView imageView = (ImageView) v.findViewById(R.id.pro_ava);
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageReference = storage.getReferenceFromUrl(u.profileImage);
-                Glide.with(ProfileFragment.this)
-                        .using(new FirebaseImageLoader())
-                        .load(storageReference)
-                        .into(imageView);
+                try {
+                    Glide.with(ProfileFragment.this)
+                            .using(new FirebaseImageLoader())
+                            .load(storageReference)
+                            .skipMemoryCache(true)
+                            .into(imageView);
+                }catch (Exception ex){
+
+                }
             }
 
             @Override
@@ -80,6 +92,23 @@ public class ProfileFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_setting, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.setting) {
+            Intent i = new Intent(getActivity(), SettingActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

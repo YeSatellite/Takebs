@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yesat.takebs"
-    >
+    package="com.yesat.takebs">
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--android:debuggable="false"-->
+
+    <!-- android:debuggable="false" -->
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LogInActivity"
+        <activity
+            android:name=".LogInActivity"
             android:theme="@style/LogInNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +33,13 @@
         <activity android:name=".RouteActivity">
             android:theme="@style/myDialog">
         </activity>
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".UserInfoActivity" />
+        <activity
+            android:name=".CommentActivity"
+            android:label="Review" />
+        <activity android:name=".AddCommActivity" />
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>

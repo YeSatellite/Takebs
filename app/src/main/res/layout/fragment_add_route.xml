@@ -13,6 +13,16 @@
         android:layout_height="match_parent"
         tools:context="com.yesat.yesat.takebs.SignUpActivity">
 
+        <ImageView
+            android:id="@+id/image_package"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/to_city"
+            app:layout_constraintRight_toRightOf="@+id/linearLayout4"
+            app:srcCompat="@drawable/package_white" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,54 +30,26 @@
             android:text="FROM"
             android:textSize="24sp"
             android:textColor="@color/colorAccent"
-            app:layout_constraintLeft_toLeftOf="@+id/linearLayout2"
-            android:layout_marginTop="64dp"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="59dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/linearLayout4" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/linearLayout2"
+        <EditText
+            android:id="@+id/from_city"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="city"
+            android:inputType="textEmailAddress"
+            android:paddingBottom="0dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="0dp"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/linearLayout4"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            android:layout_marginStart="32dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginLeft="32dp"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginRight="32dp">
-
-            <EditText
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/from_city"
-                android:hint="city"
-                android:layout_height="35dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:layout_width="160dp"
-                tools:layout_editor_absoluteY="101dp"
-                tools:layout_editor_absoluteX="24dp"
-                android:layout_weight="1"
-                android:layout_marginRight="5dp"
-                android:paddingLeft="5dp" />
-
-            <EditText
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/from_coun"
-                android:hint="country"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:layout_height="35dp"
-                android:layout_width="160dp"
-                tools:layout_editor_absoluteY="101dp"
-                tools:layout_editor_absoluteX="200dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="5dp"
-                android:paddingLeft="5dp" />
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,60 +58,38 @@
             android:text="TO"
             android:textSize="24sp"
             android:textColor="@color/colorAccent"
-            app:layout_constraintLeft_toLeftOf="@+id/linearLayout2"
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/linearLayout4"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/from_city" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@+id/textView"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout2"
+        <EditText
+            android:id="@+id/to_city"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="city"
+            android:inputType="textEmailAddress"
+            android:paddingBottom="0dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="0dp"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:id="@+id/linearLayout3">
-
-            <EditText
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/to_city"
-                android:hint="city"
-                android:layout_height="35dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:layout_width="160dp"
-                tools:layout_editor_absoluteY="101dp"
-                tools:layout_editor_absoluteX="24dp"
-                android:layout_weight="1"
-                android:layout_marginRight="5dp"
-                android:paddingLeft="5dp" />
-
-            <EditText
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/to_coun"
-                android:hint="country"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:layout_height="35dp"
-                android:layout_width="160dp"
-                tools:layout_editor_absoluteY="101dp"
-                tools:layout_editor_absoluteX="200dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="5dp"
-                android:paddingLeft="5dp" />
-        </LinearLayout>
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/linearLayout4" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@+id/linearLayout3"
-            app:layout_constraintRight_toRightOf="@+id/linearLayout3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/linearLayout4"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
-            android:id="@+id/linearLayout4">
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/to_city">
 
             <TextView
                 android:textColor="?attr/editTextColor"
@@ -212,12 +172,12 @@
             app:layout_constraintTop_toBottomOf="@+id/contact_num">
 
             <ImageView
+                android:id="@+id/type_0"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:srcCompat="@drawable/airplane"
                 android:layout_weight="1"
-                android:id="@+id/type_0"
-                android:contentDescription="airplane" />
+                android:contentDescription="airplane"
+                app:srcCompat="@drawable/airplane_filled" />
 
             <ImageView
                 android:layout_width="40dp"
@@ -284,6 +244,16 @@
             android:layout_marginBottom="32dp"
             app:layout_constraintRight_toRightOf="@+id/about"
             app:layout_constraintLeft_toLeftOf="@+id/about" />
+
+        <ImageView
+            android:id="@+id/image_man"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/from_city"
+            app:layout_constraintRight_toRightOf="@+id/linearLayout4"
+            app:srcCompat="@drawable/man_black" />
 
     </android.support.constraint.ConstraintLayout>
     </ScrollView>

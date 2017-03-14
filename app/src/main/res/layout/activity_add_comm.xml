@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.yesat.takebs.AddCommActivity">
+
+    <EditText
+        android:id="@+id/comment"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/multitext_frame"
+        android:ems="10"
+        android:gravity="top"
+        android:includeFontPadding="false"
+        android:inputType="textMultiLine"
+        android:maxLength="160"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="@+id/ratingBar2"
+        app:layout_constraintRight_toRightOf="@+id/ratingBar2"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar2"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <RatingBar
+        android:id="@+id/ratingBar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="120dp"
+        android:stepSize="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="32dp"
+        android:text="submit"
+        app:layout_constraintLeft_toLeftOf="@+id/comment"
+        app:layout_constraintRight_toRightOf="@+id/comment"
+        app:layout_constraintTop_toBottomOf="@+id/comment" />
+
+</android.support.constraint.ConstraintLayout>

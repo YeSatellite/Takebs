@@ -6,7 +6,6 @@
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
-
     <style name="LogInNoActionBar" parent="Theme.AppCompat.Light.NoActionBar" >
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -19,6 +18,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:colorBackground">?android:attr/textColorPrimaryNoDisable</item>
+        <item name="android:textColorPrimaryInverse">
+            @color/common_google_signin_btn_text_dark_pressed
+        </item>
     </style>
 
 </resources>

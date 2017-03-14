@@ -1,10 +1,9 @@
 package com.yesat.takebs;
 
+import android.content.Intent;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
@@ -16,11 +15,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.yesat.takebs.Fragment.*;
 
 import java.lang.reflect.Field;
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         bottom = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -138,7 +139,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         super.onBackPressed();
     }
     View getContentView(){
@@ -186,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
             mKeyboardVisible = isKeyboardNowVisible;
         }
     };
+
 
     private void onKeyboardShown() {
         bottom.setVisibility(View.GONE);

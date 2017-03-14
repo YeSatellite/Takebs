@@ -8,16 +8,16 @@ public class Chat {
     public String fromId;
     public String text;
     public Double timestamp;
-    public String told;
+    public String toId;
 
 
     public Chat() {
     }
 
-    public Chat(String fromId, String text, Double timestamp, String told) {
+    public Chat(String fromId, String text, Double timestamp, String toId) {
         this.fromId = fromId;
         this.text = text;
         this.timestamp = timestamp;
-        this.told = told;
+        this.toId = toId;
     }
 }

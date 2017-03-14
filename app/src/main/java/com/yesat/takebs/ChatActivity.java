@@ -67,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
                             i[0]++;
                             if(i[0] == n) {
                                 adapter.notifyDataSetChanged();
+                                listview.setSelection(adapter.getCount() - 1);
                                 Log.d(TAG,"-----------"+n+"---------"+i[0]);
                             }
                         }
@@ -104,6 +105,7 @@ public class ChatActivity extends AppCompatActivity {
                         .setValue(1);
                 Chat chat = new Chat(myUid,text,time,target_uid);
                 mDatabase.child("message").child(ref.getKey()).setValue(chat);
+                etTest.setText("");
             }
         });
 

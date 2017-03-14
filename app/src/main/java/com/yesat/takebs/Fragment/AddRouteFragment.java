@@ -36,9 +36,7 @@ public class AddRouteFragment extends Fragment {
 
     private static final String TAG = "yernar";
     private EditText vFromCity;
-    private EditText vFromCount;
     private EditText vToCity;
-    private EditText vToCount;
     private TextView vData;
     private TextView vTime;
     private EditText vCost;
@@ -50,6 +48,9 @@ public class AddRouteFragment extends Fragment {
     private ImageView vType_4;
     private EditText vAbout;
     private Button vAddRoute;
+    private String selectMethod = "2";
+    private ImageView man;
+    private ImageView pack;
 
     public AddRouteFragment() {
 
@@ -66,9 +67,7 @@ public class AddRouteFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_route, container, false);
 
         vFromCity = (EditText)v.findViewById(R.id.from_city);
-        vFromCount = (EditText)v.findViewById(R.id.from_coun);
         vToCity = (EditText)v.findViewById(R.id.to_city);
-        vToCount = (EditText)v.findViewById(R.id.to_coun);
         vData = (TextView)v.findViewById(R.id.date);
         vTime = (TextView)v.findViewById(R.id.time);
         vCost = (EditText)v.findViewById(R.id.cost);
@@ -79,6 +78,9 @@ public class AddRouteFragment extends Fragment {
         vType_3 = (ImageView)v.findViewById(R.id.type_3);
         vType_4 = (ImageView)v.findViewById(R.id.type_4);
         vType_4 = (ImageView)v.findViewById(R.id.type_4);
+        man = (ImageView)v.findViewById(R.id.image_man);
+        pack = (ImageView)v.findViewById(R.id.image_package);
+
         vAbout = (EditText)v.findViewById(R.id.about);
         vAddRoute = (Button)v.findViewById(R.id.add_route_btn);
 
@@ -127,11 +129,14 @@ public class AddRouteFragment extends Fragment {
             }
         });
         MyIconListener lis = new MyIconListener();
+        MyIconListener2 lis2 = new MyIconListener2();
         vType_0.setOnClickListener(lis);
         vType_1.setOnClickListener(lis);
         vType_2.setOnClickListener(lis);
         vType_3.setOnClickListener(lis);
         vType_4.setOnClickListener(lis);
+        man.setOnClickListener(lis2);
+        pack.setOnClickListener(lis2);
         vAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,15 +150,14 @@ public class AddRouteFragment extends Fragment {
                         User u = dataSnapshot.getValue(User.class);
                         Route route = new Route(
                                 vFromCity.getText().toString(),
-                                vFromCount.getText().toString(),
                                 vToCity.getText().toString(),
-                                vToCount.getText().toString(),
                                 vData.getText().toString(),
                                 vTime.getText().toString(),
                                 vCost.getText().toString(),
                                 vContact.getText().toString(),
                                 transport,
                                 vAbout.getText().toString(),
+                                selectMethod,
                                 u.username,
                                 user.getUid(),
                                 u.profileImage
@@ -204,6 +208,23 @@ public class AddRouteFragment extends Fragment {
                 case R.id.type_4:
                     vType_4.setImageResource(R.drawable.sedan_filled);
                     transport = "Car";
+                    break;
+            }
+        }
+    }
+    private class MyIconListener2 implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            man.setImageResource(R.drawable.man_white);
+            pack.setImageResource(R.drawable.package_white);
+            switch (v.getId()){
+                case R.id.image_man:
+                    man.setImageResource(R.drawable.man_black);
+                    selectMethod = "2";
+                    break;
+                case R.id.image_package:
+                    pack.setImageResource(R.drawable.package_black);
+                    selectMethod = "1";
                     break;
             }
         }

@@ -57,7 +57,6 @@ public class RoutesFragment extends Fragment {
         routes = new ArrayList<>();
         routeAdapter = new RouteAdapter(getActivity(),routes);
         listview = (ListView) v.findViewById(R.id.rout_listviewa);
-        Log.d(TAG, "is null:"+ (listview == null));
         listview.setAdapter(routeAdapter);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -109,22 +108,21 @@ public class RoutesFragment extends Fragment {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_route, parent, false);
             }
             ((TextView)convertView.findViewById(R.id.ro_username)).setText(route.username);
-            ((TextView)convertView.findViewById(R.id.ro_from)).setText(route.fromCity+", "+route.fromCountry);
-            ((TextView)convertView.findViewById(R.id.ro_to)).setText(route.toCity+", "+route.toCountry);
+            ((TextView)convertView.findViewById(R.id.ro_from)).setText(route.fromCity);
+            ((TextView)convertView.findViewById(R.id.ro_to)).setText(route.toCity);
             ((TextView)convertView.findViewById(R.id.ro_date)).setText(route.date);
             ((TextView)convertView.findViewById(R.id.ro_time)).setText(route.time);
-
+            ((ImageView) convertView.findViewById(R.id.im_select))
+                    .setImageResource((route.selectMethod.equals("2"))?R.drawable.man_black:R.drawable.package_black);
             ImageView imageView = (ImageView) convertView.findViewById(R.id.ro_ava);
-            
-            StorageReference storageReference = storage.getReferenceFromUrl(route.url);
-            Glide.with(RoutesFragment.this)
-                    .using(new FirebaseImageLoader())
-                    .load(storageReference)
-                    .into(imageView);
-
-
+            try {
+                StorageReference storageReference = storage.getReferenceFromUrl(route.url);
+                Glide.with(RoutesFragment.this)
+                        .using(new FirebaseImageLoader())
+                        .load(storageReference)
+                        .into(imageView);
+            }catch (Exception ex){}
             return convertView;
-
         }
     }
 
