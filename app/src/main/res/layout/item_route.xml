@@ -7,14 +7,14 @@
     android:padding="10dp">
 
     <TextView
-        android:text="Username"
+        android:id="@+id/ro_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ro_username"
-        android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="8dp"
-        app:layout_constraintLeft_toRightOf="@+id/imageView3" />
+        android:text="Username"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark_pressed"
@@ -78,8 +78,8 @@
 
     <ImageView
         android:id="@+id/im_select"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="0dp"
         android:layout_marginRight="32dp"
         app:layout_constraintBottom_toBottomOf="@+id/ro_ava"

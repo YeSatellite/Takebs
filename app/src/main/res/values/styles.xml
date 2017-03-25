@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
     </style>
     <style name="LogInNoActionBar" parent="Theme.AppCompat.Light.NoActionBar" >
         <!-- Customize your theme here. -->
