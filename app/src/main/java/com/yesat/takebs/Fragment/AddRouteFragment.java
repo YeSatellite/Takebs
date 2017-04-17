@@ -2,6 +2,7 @@ package com.yesat.takebs.Fragment;
 
 
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -23,9 +24,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.onesignal.OneSignal;
 import com.yesat.takebs.R;
+import com.yesat.takebs.SignUpActivity;
 import com.yesat.takebs.support.Route;
 import com.yesat.takebs.support.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -140,11 +146,26 @@ public class AddRouteFragment extends Fragment {
         vAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextView[] views = new TextView[]{vFromCity,vToCity,vData};
+                boolean a = false;
+                for(TextView vv: views){
+                    Log.d(TAG,vv.length()+"");
+                    if(vv.length()==0){
+                        vv.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color), PorterDuff.Mode.SRC_ATOP);
+                        a = a || true;
+                    }
+                    else{
+                        vv.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color2), PorterDuff.Mode.SRC_ATOP);
+                    }
+                }
+                if(a)return;
+
+
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 FirebaseDatabase fdb = FirebaseDatabase.getInstance();
                 final DatabaseReference dbr = fdb.getReference();
                 dbr.child("users").child(user.getUid())
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User u = dataSnapshot.getValue(User.class);
@@ -152,9 +173,9 @@ public class AddRouteFragment extends Fragment {
                                 vFromCity.getText().toString(),
                                 vToCity.getText().toString(),
                                 vData.getText().toString(),
-                                vTime.getText().toString(),
-                                vCost.getText().toString(),
-                                vContact.getText().toString(),
+                                vTime.getText().toString().length()==0?"00:00":vTime.getText().toString(),
+                                vCost.getText().toString().length()==0?"-":vCost.getText().toString(),
+                                vContact.getText().toString().length()==0?"-":vContact.getText().toString(),
                                 transport,
                                 vAbout.getText().toString(),
                                 selectMethod,
@@ -165,6 +186,21 @@ public class AddRouteFragment extends Fragment {
                         Log.d(TAG,route.toString());
 
                         dbr.child("routes").child(user.getUid()).push().setValue(route);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("Route added")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                });
+                        builder.show();
+
+                        vFromCity.setText("");
+                        vToCity.setText("");
+                        vData.setText("");
+                        vTime.setText("");
+                        vCost.setText("");
+                        vContact.setText("");
+                        vAbout.setText("");
 
                     }
 

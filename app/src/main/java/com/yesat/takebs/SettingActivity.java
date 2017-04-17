@@ -1,8 +1,10 @@
 package com.yesat.takebs;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,8 +22,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,6 +60,7 @@ public class SettingActivity extends AppCompatActivity {
     private TextView city;
     private TextView data;
     private EditText user;
+    private EditText about;
     private DatabaseReference mDatabase;
     private User mUser;
 
@@ -71,6 +76,7 @@ public class SettingActivity extends AppCompatActivity {
         // ----------------------------------------------------------
         ava = (ImageView) findViewById(R.id.iv_ava);
         user = (EditText)findViewById(R.id.st_user);
+        about = (EditText)findViewById(R.id.st_about);
         coun = (TextView)findViewById(R.id.st_coun);
         city = (TextView)findViewById(R.id.st_city);
         data = (TextView)findViewById(R.id.st_data);
@@ -126,11 +132,14 @@ public class SettingActivity extends AppCompatActivity {
                         coun.setText(mUser.country);
                         city.setText(mUser.city);
                         data.setText(mUser.date);
+                        about.setText(mUser.aboutYourSelf);
                         StorageReference storageReference = mStorage.getReferenceFromUrl(mUser.profileImage);
                         try {
                             Glide.with(SettingActivity.this)
                                     .using(new FirebaseImageLoader())
                                     .load(storageReference)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
                                     .into(ava);
                         }catch (Exception ex){
 
@@ -141,6 +150,20 @@ public class SettingActivity extends AppCompatActivity {
 
                     }
                 });
+        findViewById(R.id.bt_res_pass).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.sendPasswordResetEmail(mAuth.getCurrentUser().getEmail());
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                builder.setMessage("Check your email")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                builder.show();
+            }
+        });
 
 
     }
@@ -166,6 +189,17 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void saveUser() {
+        if(user.length()==0){
+            user.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color), PorterDuff.Mode.SRC_ATOP);
+            return;
+        }
+        else{
+            user.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color2), PorterDuff.Mode.SRC_ATOP);
+        }
+
+
+
+
         StorageReference mountainsRef = mStorage.getReference().child(mAuth.getCurrentUser().getUid());
 
         ava.setDrawingCacheEnabled(true);
@@ -175,6 +209,7 @@ public class SettingActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         final byte[] d = baos.toByteArray();
         UploadTask uploadTask = mountainsRef.putBytes(d);
+        final ProgressDialog pd = ProgressDialog.show(SettingActivity.this,"","",true);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -187,13 +222,20 @@ public class SettingActivity extends AppCompatActivity {
                 Log.d(TAG, uri.toString());
 
                 mUser.username = user.getText().toString();
+                mUser.aboutYourSelf = about.getText().toString();
                 mUser.country = coun.getText().toString();
                 mUser.date = data.getText().toString();
                 mUser.city = city.getText().toString();
                 mUser.profileImage = uri.toString();
 
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).setValue(mUser);
+                pd.dismiss();
                 finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                pd.dismiss();
             }
         });
     }

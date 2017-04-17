@@ -2,10 +2,14 @@ package com.yesat.takebs.Fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +31,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yesat.takebs.ChatActivity;
+import com.yesat.takebs.MyRouteActivity;
 import com.yesat.takebs.R;
 import com.yesat.takebs.support.Chat;
 import com.yesat.takebs.support.ChatPerson;
+import com.yesat.takebs.support.Route;
 import com.yesat.takebs.support.User;
 
 import java.text.SimpleDateFormat;
@@ -43,11 +49,14 @@ import java.util.List;
  */
 public class ChatFragment extends Fragment {
 
+    private static final String TAG = "yernar";
     private ArrayList<ChatPerson> chatPersons;
+    private ArrayList<String> keys;
     private DatabaseReference mDatabase;
     private FirebaseUser mUser;
     private ChatPersonAdapter adapter;
     private FirebaseStorage mStorage;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -60,6 +69,7 @@ public class ChatFragment extends Fragment {
         mStorage = FirebaseStorage.getInstance();
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         chatPersons = new ArrayList<>();
+        keys = new ArrayList<>();
         adapter = new ChatPersonAdapter(getActivity(), chatPersons);
 
         View v = inflater.inflate(R.layout.fragment_chat, container, false);
@@ -71,6 +81,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 chatPersons.clear();
+                keys.clear();
                 for (DataSnapshot psUser: dataSnapshot.getChildren()) {
                     String url = psUser.getKey();
                     Iterator<DataSnapshot> iter = psUser.getChildren().iterator();
@@ -79,6 +90,7 @@ public class ChatFragment extends Fragment {
                         lastData = iter.next();
                     }
                     chatPersons.add(new ChatPerson(url,lastData.getKey()));
+                    keys.add(psUser.getKey());
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -97,6 +109,61 @@ public class ChatFragment extends Fragment {
                 startActivity(i);
             }
         });
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Delete this Chat")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String key = keys.get(position);
+                                Log.d(TAG,key);
+                                mDatabase.child("user-messages").child(mUser.getUid()).child(key).removeValue();
+                            }
+                        })
+                        .setNegativeButton("Cancel",null);
+                builder.show();
+                return true;
+            }
+        });
+
+        mySwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mDatabase.child("user-messages").child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        chatPersons.clear();
+                        keys.clear();
+                        for (DataSnapshot psUser: dataSnapshot.getChildren()) {
+                            String url = psUser.getKey();
+                            Iterator<DataSnapshot> iter = psUser.getChildren().iterator();
+                            DataSnapshot lastData = null;
+                            while (iter.hasNext()){
+                                lastData = iter.next();
+                            }
+                            chatPersons.add(new ChatPerson(url,lastData.getKey()));
+                            keys.add(psUser.getKey());
+                        }
+                        adapter.notifyDataSetChanged();
+                        mySwipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+        mySwipeRefreshLayout.setColorSchemeResources(
+                android.R.color.black,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
 
         return v;
     }
@@ -144,11 +211,15 @@ public class ChatFragment extends Fragment {
                             name.setText(u.username);
 
                             FirebaseStorage storage = FirebaseStorage.getInstance();
-                            StorageReference storageReference = storage.getReferenceFromUrl(u.profileImage);
-                            Glide.with(ChatFragment.this)
-                                    .using(new FirebaseImageLoader())
-                                    .load(storageReference)
-                                    .into(ava);
+                            try {
+                                StorageReference storageReference = storage.getReferenceFromUrl(u.profileImage);
+                                Glide.with(ChatFragment.this)
+                                        .using(new FirebaseImageLoader())
+                                        .load(storageReference)
+                                        .into(ava);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override

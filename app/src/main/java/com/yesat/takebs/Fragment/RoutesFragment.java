@@ -1,13 +1,18 @@
 package com.yesat.takebs.Fragment;
 
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +49,7 @@ public class RoutesFragment extends Fragment {
     private RouteAdapter routeAdapter;
     private ArrayList<Route> routes;
     private FirebaseStorage storage;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     public RoutesFragment() {
         // Required empty public constructor
@@ -50,6 +57,7 @@ public class RoutesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_routes, container, false);
 
         storage = FirebaseStorage.getInstance();
@@ -91,9 +99,38 @@ public class RoutesFragment extends Fragment {
             }
         });
 
+        mySwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mDatabase.child("routes").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        routes.clear();
+                        for (DataSnapshot psUser: dataSnapshot.getChildren()) {
+                            for (DataSnapshot psRoute: psUser.getChildren()) {
+                                routes.add(psRoute.getValue(Route.class));
+                            }
+                        }
+                        routeAdapter.notifyDataSetChanged();
+                        mySwipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+        mySwipeRefreshLayout.setColorSchemeResources(
+                android.R.color.black,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
         return v;
     }
-
     public class RouteAdapter extends ArrayAdapter<Route> {
         public RouteAdapter(Context context, List<Route> objects) {
             super(context, 0, objects);
@@ -120,10 +157,21 @@ public class RoutesFragment extends Fragment {
                 Glide.with(RoutesFragment.this)
                         .using(new FirebaseImageLoader())
                         .load(storageReference)
+//                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(imageView);
             }catch (Exception ex){}
             return convertView;
         }
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        // Assumes current activity is the searchable activity
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
     }
 
     @Override

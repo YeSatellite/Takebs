@@ -4,17 +4,17 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="TextView"
+        android:id="@+id/chat_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/chat_text"
-        android:layout_weight="1"
-        android:textSize="16sp"
-        android:background="@drawable/left_chat"
         android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/left_chat"
         android:paddingBottom="5dp"
-        android:paddingTop="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:textColor="@color/colorAccent" />
+        android:paddingTop="5dp"
+        android:text="TextView"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
 </FrameLayout>

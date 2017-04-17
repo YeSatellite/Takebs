@@ -31,22 +31,23 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "yernar";
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ViewPagerAdapter adapeter;
-    private BottomNavigationView bottom;
+    public BottomNavigationView bottom;
     private MenuItem prevMenuItem;
+
+    public MainActivity() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         bottom = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         disableShiftMode(bottom);
         setupViewPager(viewPager);
+        setTitle(bottom.getMenu().getItem(0).getTitle());
 
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
                 bottom.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottom.getMenu().getItem(position);
+                setTitle(bottom.getMenu().getItem(position).getTitle());
             }
 
             @Override

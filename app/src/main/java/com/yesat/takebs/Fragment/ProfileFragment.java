@@ -4,6 +4,7 @@ package com.yesat.takebs.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yesat.takebs.MainActivity;
+import com.yesat.takebs.MyRouteActivity;
 import com.yesat.takebs.R;
 import com.yesat.takebs.SettingActivity;
 import com.yesat.takebs.support.User;
@@ -34,6 +37,7 @@ import com.yesat.takebs.support.User;
 public class ProfileFragment extends Fragment {
 
 
+    private static final String TAG = "yernar";
     private DatabaseReference mDatabase;
     private FirebaseStorage storage;
     private StorageReference mStorageRef;
@@ -56,6 +60,21 @@ public class ProfileFragment extends Fragment {
         storage = FirebaseStorage.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
+        v.findViewById(R.id.btn_log_out).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                getActivity().finish();
+            }
+        });
+        v.findViewById(R.id.btn_my_route).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MyRouteActivity.class);
+                startActivity(i);
+            }
+        });
+
         mDatabase.child("users").child(mAuth.getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
             @Override
@@ -73,15 +92,17 @@ public class ProfileFragment extends Fragment {
 
                 ImageView imageView = (ImageView) v.findViewById(R.id.pro_ava);
                 FirebaseStorage storage = FirebaseStorage.getInstance();
+                Log.d(TAG,u.profileImage);
                 StorageReference storageReference = storage.getReferenceFromUrl(u.profileImage);
                 try {
                     Glide.with(ProfileFragment.this)
                             .using(new FirebaseImageLoader())
                             .load(storageReference)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true)
                             .into(imageView);
                 }catch (Exception ex){
-
+                    Log.d(TAG,"errpr");
                 }
             }
 

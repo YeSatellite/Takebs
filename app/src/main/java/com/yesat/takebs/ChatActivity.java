@@ -11,17 +11,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.onesignal.OneSignal;
 import com.yesat.takebs.support.Chat;
 import com.yesat.takebs.support.ChatPerson;
+import com.yesat.takebs.support.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,7 +62,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 chats.clear();
-                final int n = size(dataSnapshot.getChildren());
+                final int n = (int) dataSnapshot.getChildrenCount();
                 final int[] i = { 0 };
                 for (DataSnapshot psUser: dataSnapshot.getChildren()) {
                     String key = psUser.getKey();
@@ -88,14 +95,15 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         final EditText etTest = (EditText)findViewById(R.id.text_chat);
-        Button sent = (Button)findViewById(R.id.btn_sent);
+        TextView sent = (TextView) findViewById(R.id.btn_send);
 
         sent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String myUid = mAuth.getCurrentUser().getUid();
                 String target_uid = chatPerson.uid;
-                String text = etTest.getText().toString();
+                final String text = etTest.getText().toString();
+                if(text.length()==0)return;
                 double time = System.currentTimeMillis()/1000.0;
                 DatabaseReference ref = mDatabase.child("user-messages")
                         .child(myUid).child(target_uid).push();
@@ -106,19 +114,27 @@ public class ChatActivity extends AppCompatActivity {
                 Chat chat = new Chat(myUid,text,time,target_uid);
                 mDatabase.child("message").child(ref.getKey()).setValue(chat);
                 etTest.setText("");
+
+                mDatabase.child("users").child(target_uid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        try {
+                            OneSignal.postNotification(new JSONObject("{'contents': {'en':'" + text + "'}, 'include_player_ids': ['" + user.oneSignalId + "']}"), null);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
-    }
-    public int size(Iterable<?> it) {
-        if (it instanceof Collection)
-            return ((Collection<?>)it).size();
-
-        // else iterate
-
-        int i = 0;
-        for (Object obj : it) i++;
-        return i;
     }
 
     public class ChatAdapter extends ArrayAdapter<Chat> {

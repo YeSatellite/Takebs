@@ -1,21 +1,31 @@
 package com.yesat.takebs;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.ContextThemeWrapper;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
@@ -24,7 +34,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yesat.takebs.support.Chat;
+import com.yesat.takebs.support.ChatPerson;
 import com.yesat.takebs.support.Route;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class RouteActivity extends AppCompatActivity {
 
@@ -33,6 +49,8 @@ public class RouteActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private String parrent;
+    private TextView fromTo;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +64,8 @@ public class RouteActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         ((TextView)findViewById(R.id.pro_name)).setText(route.username);
-        ((TextView)findViewById(R.id.big_to_from)).setText(route.fromCity+" - "+route.toCity);
+        fromTo = (TextView)findViewById(R.id.big_to_from);
+        fromTo.setText(route.fromCity+" - "+route.toCity);
         ((TextView)findViewById(R.id.big_date)).setText(route.date);
         ((TextView)findViewById(R.id.big_time)).setText(route.time);
         ((TextView)findViewById(R.id.big_delivery_method)).setText(route.deliveryMethod);
@@ -56,7 +75,7 @@ public class RouteActivity extends AppCompatActivity {
 
         MyListener listener = new MyListener();
 
-        ImageView imageView = (ImageView) findViewById(R.id.big_ava);
+        imageView = (ImageView) findViewById(R.id.big_ava);
         imageView.setOnClickListener(listener);
         findViewById(R.id.pro_name).setOnClickListener(listener);
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -66,6 +85,7 @@ public class RouteActivity extends AppCompatActivity {
             Glide.with(RouteActivity.this)
                     .using(new FirebaseImageLoader())
                     .load(storageReference)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(imageView);
         }catch (Exception ex){
@@ -76,6 +96,13 @@ public class RouteActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         mDatabase.child("favourites").child(mAuth.getCurrentUser().getUid()).push().setValue(route);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RouteActivity.this);
+                        builder.setMessage("Route added to favourites")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                });
+                        builder.show();
                     }
                 });
 
@@ -86,7 +113,9 @@ public class RouteActivity extends AppCompatActivity {
                         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(RouteActivity.this, R.style.myDialog));
                         final EditText input = new EditText(RouteActivity.this);
                         input.setHint("Text something...");
-                        builder.setView(input);
+                        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+                        input.layout(20,0,20,0);
+                        builder.setView(input,50,0,50,0);
                         builder.setTitle("Sent Message");
                         builder.setNegativeButton("Cancel", null);
                         builder.setPositiveButton("Sent", new DialogInterface.OnClickListener() {
@@ -104,6 +133,9 @@ public class RouteActivity extends AppCompatActivity {
                                 .setValue(1);
                                 Chat chat = new Chat(myUid,text,time,target_uid);
                                 mDatabase.child("message").child(ref.getKey()).setValue(chat);
+                                Intent i = new Intent(RouteActivity.this, ChatActivity.class);
+                                i.putExtra("chat",new ChatPerson(target_uid,""));
+                                startActivity(i);
                                 }
                         });
                         builder.show();
@@ -117,6 +149,13 @@ public class RouteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.item_share){
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_TEXT, fromTo.getText().toString()+"\nwww.takebs.com");
+            startActivity(Intent.createChooser(share, "Takebs"));
+            return true;
+        }
         if(item.getItemId()==android.R.id.home){
             finish();
             return true;
@@ -130,5 +169,10 @@ public class RouteActivity extends AppCompatActivity {
             i.putExtra("uid",route.uid);
             startActivityForResult(i,37);
         }
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_share, menu);
+        return true;
     }
 }

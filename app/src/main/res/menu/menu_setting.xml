@@ -4,7 +4,6 @@
 
     <item
         android:id="@+id/setting"
-        android:icon="@android:drawable/ic_menu_manage"
-        android:title="Setting"
+        android:title="edit"
         app:showAsAction="ifRoom" />
 </menu>

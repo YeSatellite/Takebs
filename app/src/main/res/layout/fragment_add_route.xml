@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/image_package"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/to_city"
@@ -147,25 +147,25 @@
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
             android:paddingLeft="5dp"
-            android:inputType="number"
-            android:singleLine="false" />
+            android:inputType="number" />
 
         <EditText
-            android:inputType="textEmailAddress"
-            android:ems="10"
             android:id="@+id/contact_num"
-            android:hint="contact number"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
-            android:textSize="14sp"
+            android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/cost"
+            android:ems="10"
+            android:hint="contact number"
+            android:inputType="phone"
+            android:paddingBottom="0dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="0dp"
+            android:selectAllOnFocus="false"
+            android:textSize="14sp"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/cost"
             app:layout_constraintRight_toRightOf="@+id/cost"
-            android:layout_width="0dp"
-            android:paddingLeft="5dp"
-            app:layout_constraintHorizontal_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/cost" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -194,6 +194,14 @@
                 android:contentDescription="ship" />
 
             <ImageView
+                android:id="@+id/type_4"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:contentDescription="sedan"
+                app:srcCompat="@drawable/sedan" />
+
+            <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 app:srcCompat="@drawable/railway"
@@ -208,13 +216,6 @@
                 android:layout_weight="1"
                 android:contentDescription="bus" />
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:srcCompat="@drawable/sedan"
-                android:id="@+id/type_4"
-                android:layout_weight="1"
-                android:contentDescription="sedan" />
         </LinearLayout>
 
         <EditText
@@ -239,22 +240,23 @@
             android:layout_height="100dp" />
 
         <Button
-            android:text="Add Route"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:id="@+id/add_route_btn"
-            android:background="@color/colorPrimary"
-            app:layout_constraintTop_toBottomOf="@+id/about"
-            android:layout_marginTop="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
             android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/colorPrimary"
+            android:text="Add Route"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/about"
             app:layout_constraintRight_toRightOf="@+id/about"
-            app:layout_constraintLeft_toLeftOf="@+id/about" />
+            app:layout_constraintTop_toBottomOf="@+id/about" />
 
         <ImageView
             android:id="@+id/image_man"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/from_city"

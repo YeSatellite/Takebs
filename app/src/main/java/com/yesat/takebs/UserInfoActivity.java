@@ -78,15 +78,13 @@ public class UserInfoActivity extends AppCompatActivity {
         mDatabase.child("comments").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int sum = 0;
-                int n = 0;
+                long sum = 0;
+                long n = dataSnapshot.getChildrenCount();
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()) {
                     String rate = dataSnapshot1.getValue(CommentClass.class).Rate;
                     sum += Integer.parseInt(rate);
-                    n++;
-
                 }
-                if(n == 0)((TextView) findViewById(R.id.tv_rate)).setText("");
+                if(n==0)((TextView) findViewById(R.id.tv_rate)).setText("");
                 else ((TextView) findViewById(R.id.tv_rate)).setText(sum/n+"/5");
                 //double rate = 1.0*sum/n;
                 //((TextView) findViewById(R.id.tv_rate)).setText(new DecimalFormat("#.#").format(rate)+"/5");

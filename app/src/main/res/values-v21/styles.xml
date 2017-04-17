@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="myDialog" parent="Theme.AppCompat.Dialog">
+    <style name="myDialog" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:colorBackground">?android:attr/textColorPrimaryNoDisable</item>
+        <item name="android:colorBackground">?android:attr/textColorAlertDialogListItem</item>
         <item name="android:navigationBarColor">?attr/actionMenuTextColor</item>
         <item name="android:textColorPrimaryInverse">
             @color/common_google_signin_btn_text_dark_pressed

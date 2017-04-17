@@ -1,8 +1,12 @@
 package com.yesat.takebs;
 
+import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,8 +18,12 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +63,8 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView team;
     private Button singUp;
     private FirebaseAuth mAuth;
+    private CheckBox cb;
+    private ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +85,11 @@ public class SignUpActivity extends AppCompatActivity {
         about = (TextView)findViewById(R.id.about);
         team = (TextView)findViewById(R.id.team);
         singUp = (Button) findViewById(R.id.bt_sign_up);
+        cb = (CheckBox) findViewById(R.id.checkBox);
         coun.setError(null);
+        pb = (ProgressBar) findViewById(R.id.progressBar2);
+        pb.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+
 
         // -----------------------------------------------------------------------------------------
         ava.setImageResource(R.drawable.avatar);
@@ -112,15 +126,8 @@ public class SignUpActivity extends AppCompatActivity {
         team.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { // team
-                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                TextView text = new TextView(SignUpActivity.this);
-                text.setTextSize(20);
-                text.setPadding(10,10,10,10);
-                text.setGravity(Gravity.CENTER);
-                text.setText("Bla bla bla bla bla d fdfds sddfasd df dd fa gdf d adadaf dagadfgad gadgfdgad fgdaagfg dgfghfg ffadffafg");
-                builder.setView(text);
-                builder.setPositiveButton("OK",null);
-                builder.show();
+                Intent i = new Intent(SignUpActivity.this,LitActivity.class);
+                startActivity(i);
             }
         });
         singUp.setOnClickListener(new View.OnClickListener() {
@@ -130,38 +137,36 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
         // -----------------------------------------------------------------------------------------
-        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        View.OnFocusChangeListener myl = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(email.getText().length()==0 && !hasFocus){
-                    email.setError("bla bla");
+                EditText editText = (EditText) v;
+                if(editText.getText().length()==0 && !hasFocus){
+                    editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color), PorterDuff.Mode.SRC_ATOP);
+                }
+                else{
+                    editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color2), PorterDuff.Mode.SRC_ATOP);
                 }
             }
-        });
-        pass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        };
+
+        email.setOnFocusChangeListener(myl);
+        pass.setOnFocusChangeListener(myl);
+        pass2.setOnFocusChangeListener(myl);
+        user.setOnFocusChangeListener(myl);
+
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(pass.getText().length()==0 && !hasFocus){
-                    pass.setError("bla bla");
-                }
-            }
-        });
-        pass2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!pass2.getText().toString().
-                        equals(pass.getText().toString())&&
-                        !hasFocus){
-                    pass2.setError("bla bla");
-                }
-            }
-        });
-        user.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(user.getText().length()==0 && !hasFocus){
-                    user.setError("bla bla");
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked)return;
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                builder.setMessage(R.string.warning)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // FIRE ZE MISSILES!
+                            }
+                        });
+                builder.show();
             }
         });
     }
@@ -200,42 +205,51 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
     private void signUp(){
-        if(pass2.getError() != null){
-            Toast.makeText(this, pass2.getError(),
-                    Toast.LENGTH_SHORT).show();
+
+        if(email.length()==0 || pass.length()==0 || pass2.length()==0 || user.length()==0){
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(user.getError() != null){
-            Toast.makeText(this, user.getError(),
-                    Toast.LENGTH_SHORT).show();
+
+        if(!pass.getText().toString().equals(pass2.getText().toString())){
+            Toast.makeText(this, "Passwords are not same", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String email_s  = email.getText().toString();
         String pass_s = pass.getText().toString();
-        mAuth.createUserWithEmailAndPassword(email_s, pass_s)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        if (task.isSuccessful()){
-                            Log.d(TAG, mAuth.getCurrentUser().getUid());
-                            saveUser(mAuth.getCurrentUser().getUid());
+        try {
+            mAuth.createUserWithEmailAndPassword(email_s, pass_s)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                            if (task.isSuccessful()){
+                                Log.d(TAG, mAuth.getCurrentUser().getUid());
+                                saveUser(mAuth.getCurrentUser().getUid());
+                            }
+                            else{
+                                Toast.makeText(SignUpActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                                pb.setVisibility(View.INVISIBLE);
+                            }
                         }
-                        else{
-                            Toast.makeText(SignUpActivity.this, task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    });
+            pb.setVisibility(View.VISIBLE);
+            singUp.setText("");
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            pb.setVisibility(View.INVISIBLE);
+            singUp.setText("Sign up");
+        }
     }
 
     private void saveUser(final String uid){
+        Log.d(TAG,"saveUser");
 
         final String oneSignalId = "null";
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://takebs-399c1.appspot.com");
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference mountainsRef = storageRef.child(uid);
 
         ava.setDrawingCacheEnabled(true);
@@ -248,7 +262,7 @@ public class SignUpActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+                Log.d(TAG,"fail");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -271,10 +285,9 @@ public class SignUpActivity extends AppCompatActivity {
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                 mDatabase.child("users").child(uid).setValue(u);
                 finish();
+                pb.setVisibility(View.INVISIBLE);
+                singUp.setText("Sign up");
             }
         });
-
-
-
     }
 }

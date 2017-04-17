@@ -38,7 +38,6 @@
         app:layout_constraintRight_toRightOf="@+id/imageView"
         tools:ignore="HardcodedText,MissingConstraints"
         app:layout_constraintHorizontal_bias="0.639"
-        android:layout_marginTop="-10dp"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
@@ -59,8 +58,8 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginEnd="42dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
         android:layout_marginStart="42dp"
         android:layout_marginTop="32dp"
         android:ems="10"
@@ -76,8 +75,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="42dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
         android:layout_marginStart="42dp"
         android:layout_marginTop="8dp"
         android:ems="10"
@@ -88,43 +87,29 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_email_login" />
 
-    <Button
-        android:id="@+id/bt_login"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="50dp"
-        android:background="@color/colorPrimary"
-        android:text="LOGIN"
-        android:textColor="@android:color/background_light"
-        app:layout_constraintLeft_toLeftOf="@+id/et_pass_login"
-        app:layout_constraintRight_toRightOf="@+id/et_pass_login"
-        app:layout_constraintTop_toBottomOf="@+id/et_pass_login"
-        app:layout_constraintHorizontal_bias="0.0" />
-
     <TextView
         android:id="@+id/tv_for_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:padding="10dp"
         android:text="Forgot Password"
         android:textSize="10sp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_sign_in"
+        app:layout_constraintVertical_chainStyle="packed"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/tv_sign_in"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_sign_in"
         app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_sign_in" />
+        app:layout_constraintBottom_toTopOf="@+id/tv_sign_in"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
     <TextView
         android:id="@+id/tv_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:clickable="true"
         android:paddingBottom="5dp"
         android:paddingLeft="80dp"
@@ -132,9 +117,63 @@
         android:paddingTop="5dp"
         android:text="Create Account"
         android:textColor="@color/colorPrimary"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@+id/bt_login"
-        app:layout_constraintRight_toRightOf="@+id/bt_login"
-        app:layout_constraintHorizontal_bias="0.513" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_for_pass"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_pass_login"
+        android:id="@+id/relativeLayout">
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:elevation="4dp"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/bt_login"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            android:layout_alignTop="@+id/progressBar2"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorPrimary"
+            android:text="LOGIN"
+            android:textColor="@android:color/background_light" />
+
+    </RelativeLayout>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        app:layout_constraintGuide_begin="20dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        app:layout_constraintGuide_begin="20dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="20dp" />
 
 </android.support.constraint.ConstraintLayout>

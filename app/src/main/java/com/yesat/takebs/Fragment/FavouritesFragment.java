@@ -2,10 +2,13 @@ package com.yesat.takebs.Fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +44,9 @@ public class FavouritesFragment extends Fragment {
     private ListView listview;
     private RouteAdapter routeAdapter;
     private ArrayList<Route> routes;
+    private ArrayList<String> keys;
     private FirebaseStorage storage;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
 
     public FavouritesFragment() {
         // Required empty public constructor
@@ -53,9 +58,11 @@ public class FavouritesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_routes, container, false);
 
         storage = FirebaseStorage.getInstance();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         routes = new ArrayList<>();
+        keys = new ArrayList<>();
+
         routeAdapter = new RouteAdapter(getActivity(),routes);
         listview = (ListView) v.findViewById(R.id.rout_listviewa);
         Log.d(TAG, "is null:"+ (listview == null));
@@ -70,8 +77,10 @@ public class FavouritesFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 routes.clear();
+                keys.clear();
                 for (DataSnapshot psRoute: dataSnapshot.getChildren()) {
                     routes.add(psRoute.getValue(Route.class));
+                    keys.add(psRoute.getKey());
                 }
                 routeAdapter.notifyDataSetChanged();
             }
@@ -91,7 +100,57 @@ public class FavouritesFragment extends Fragment {
                 startActivity(i);
             }
         });
+        mySwipeRefreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
+        mySwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mDatabase.child("favourites").
+                        child(mAuth.getCurrentUser().getUid())
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                routes.clear();
+                                keys.clear();
+                                for (DataSnapshot psRoute: dataSnapshot.getChildren()) {
+                                    routes.add(psRoute.getValue(Route.class));
+                                    keys.add(psRoute.getKey());
+                                }
+                                routeAdapter.notifyDataSetChanged();
+                                mySwipeRefreshLayout.setRefreshing(false);
+                            }
 
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+            }
+        });
+        mySwipeRefreshLayout.setColorSchemeResources(
+                android.R.color.black,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Delete this Route")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String key = keys.get(position);
+                                Log.d(TAG,key);
+                                mDatabase.child("favourites").
+                                        child(mAuth.getCurrentUser().getUid()).child(key).removeValue();
+                            }
+                        })
+                        .setNegativeButton("Cancel",null);
+                builder.show();
+                return true;
+            }
+        });
         return v;
     }
 
