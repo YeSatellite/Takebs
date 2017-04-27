@@ -29,14 +29,22 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.onesignal.OneSignal;
 import com.yesat.takebs.support.Chat;
 import com.yesat.takebs.support.ChatPerson;
 import com.yesat.takebs.support.Route;
 import com.yesat.takebs.support.Route2;
+import com.yesat.takebs.support.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -125,7 +133,7 @@ public class RouteActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 String myUid = mAuth.getCurrentUser().getUid();
                                 String target_uid = route.uid;
-                                String text = input.getText().toString();
+                                final String text = input.getText().toString();
                                 double time = System.currentTimeMillis()/1000.0;
                                 DatabaseReference ref = mDatabase.child("user-messages")
                                 .child(myUid).child(target_uid).push();
@@ -138,6 +146,23 @@ public class RouteActivity extends AppCompatActivity {
                                 Intent i = new Intent(RouteActivity.this, ChatActivity.class);
                                 i.putExtra("chat",new ChatPerson(target_uid,""));
                                 startActivity(i);
+                                mDatabase.child("users").child(target_uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+                                        try {
+                                            OneSignal.postNotification(new JSONObject("{'contents': {'en':'" + text + "'}, 'include_player_ids': ['" + user.oneSignalId + "']}"), null);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                                 }
                         });
                         builder.show();

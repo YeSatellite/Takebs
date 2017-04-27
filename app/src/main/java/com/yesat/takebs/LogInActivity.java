@@ -83,9 +83,6 @@ public class LogInActivity extends AppCompatActivity {
                             if (registrationId != null)
                                 Log.d(TAG, "registrationId:" + registrationId);
 
-                            EditText etEmail = (EditText) findViewById(R.id.et_email_login);
-                            EditText etPass = (EditText) findViewById(R.id.et_pass_login);
-
                             Intent intent = new Intent(LogInActivity.this, MainActivity.class);
                             startActivityForResult(intent, 2);
                             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -134,6 +131,8 @@ public class LogInActivity extends AppCompatActivity {
                     pb.setVisibility(View.VISIBLE);
                 }catch (IllegalArgumentException ex){
                     Toast.makeText(LogInActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    login.setText("Login");
+                    pb.setVisibility(View.INVISIBLE);
                 }
 
             }

@@ -62,7 +62,7 @@ public class AddRouteFragment extends Fragment {
 
     }
 
-    String transport = "";
+    String transport = "Airplane";
 
 
 

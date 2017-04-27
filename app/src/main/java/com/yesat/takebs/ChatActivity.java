@@ -115,7 +115,7 @@ public class ChatActivity extends AppCompatActivity {
                 mDatabase.child("message").child(ref.getKey()).setValue(chat);
                 etTest.setText("");
 
-                mDatabase.child("users").child(target_uid).addValueEventListener(new ValueEventListener() {
+                mDatabase.child("users").child(target_uid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);

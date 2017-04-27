@@ -200,6 +200,11 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        if(!cb.isChecked()){
+            Toast.makeText(this, "Please accept Terms and Conditions", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         String email_s  = email.getText().toString();
         String pass_s = pass.getText().toString();
@@ -217,6 +222,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(SignUpActivity.this, task.getException().getMessage(),
                                         Toast.LENGTH_SHORT).show();
                                 pb.setVisibility(View.INVISIBLE);
+                                singUp.setText("Sign up");
                             }
                         }
                     });
@@ -270,6 +276,12 @@ public class SignUpActivity extends AppCompatActivity {
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                 mDatabase.child("users").child(uid).setValue(u);
                 finish();
+                pb.setVisibility(View.INVISIBLE);
+                singUp.setText("Sign up");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
                 pb.setVisibility(View.INVISIBLE);
                 singUp.setText("Sign up");
             }
