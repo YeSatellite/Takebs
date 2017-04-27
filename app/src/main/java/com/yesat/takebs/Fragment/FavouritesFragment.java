@@ -1,6 +1,7 @@
 package com.yesat.takebs.Fragment;
 
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,12 +12,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.yesat.takebs.R;
 import com.yesat.takebs.RouteActivity;
 import com.yesat.takebs.support.Route;
+import com.yesat.takebs.support.Route2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +53,9 @@ public class FavouritesFragment extends Fragment {
     private ArrayList<String> keys;
     private FirebaseStorage storage;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    private String filter = "";
+    private FirebaseAuth mAuth;
+    private SearchView searchView;
 
     public FavouritesFragment() {
         // Required empty public constructor
@@ -55,10 +64,11 @@ public class FavouritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_routes, container, false);
 
         storage = FirebaseStorage.getInstance();
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         routes = new ArrayList<>();
         keys = new ArrayList<>();
@@ -79,8 +89,11 @@ public class FavouritesFragment extends Fragment {
                 routes.clear();
                 keys.clear();
                 for (DataSnapshot psRoute: dataSnapshot.getChildren()) {
-                    routes.add(psRoute.getValue(Route.class));
-                    keys.add(psRoute.getKey());
+                    Route r = psRoute.getValue(Route2.class).toRoute();
+                    if(r.have(filter)) {
+                        routes.add(r);
+                        keys.add(psRoute.getKey());
+                    }
                 }
                 routeAdapter.notifyDataSetChanged();
             }
@@ -112,8 +125,11 @@ public class FavouritesFragment extends Fragment {
                                 routes.clear();
                                 keys.clear();
                                 for (DataSnapshot psRoute: dataSnapshot.getChildren()) {
-                                    routes.add(psRoute.getValue(Route.class));
-                                    keys.add(psRoute.getKey());
+                                    Route r = psRoute.getValue(Route2.class).toRoute();
+                                    if(r.have(filter)) {
+                                        routes.add(r);
+                                        keys.add(psRoute.getKey());
+                                    }
                                 }
                                 routeAdapter.notifyDataSetChanged();
                                 mySwipeRefreshLayout.setRefreshing(false);
@@ -175,6 +191,10 @@ public class FavouritesFragment extends Fragment {
 
             ImageView imageView = (ImageView) convertView.findViewById(R.id.ro_ava);
             imageView.setVisibility(View.GONE);
+
+            ImageView imageView2 = (ImageView) convertView.findViewById(R.id.im_select);
+            imageView2.setVisibility(View.GONE);
+
             return convertView;
 
         }
@@ -183,5 +203,62 @@ public class FavouritesFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search, menu);
+
+        final SearchManager searchManager =
+                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView =
+                (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d(TAG,newText);
+                filter(newText);
+                return true;
+            }
+        });
+
+    }
+
+    public void filter(String query) {
+        filter = query;
+        mDatabase.child("favourites").
+                child(mAuth.getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        routes.clear();
+                        keys.clear();
+                        for (DataSnapshot psRoute: dataSnapshot.getChildren()){
+                            Route r = psRoute.getValue(Route2.class).toRoute();
+                            if(r.have(filter)) {
+                                routes.add(r);
+                                keys.add(psRoute.getKey());
+                            }
+                        }
+                        routeAdapter.notifyDataSetChanged();
+                        mySwipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
     }
 }

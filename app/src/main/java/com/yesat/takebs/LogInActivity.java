@@ -1,6 +1,6 @@
 package com.yesat.takebs;
 
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,10 +24,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.onesignal.OSNotification;
 import com.onesignal.OneSignal;
-import com.yesat.takebs.support.OneSignalHandler;
 
 public class LogInActivity extends AppCompatActivity {
     
@@ -34,6 +36,8 @@ public class LogInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private Button login;
+    private EditText etEmail;
+    private EditText etPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +46,28 @@ public class LogInActivity extends AppCompatActivity {
 
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.None)
-                .setNotificationReceivedHandler(new OneSignalHandler())
+                .setNotificationReceivedHandler(new OneSignal.NotificationReceivedHandler() {
+                    @Override
+                    public void notificationReceived(OSNotification notification) {
+
+                    }
+                })
                 .autoPromptLocation(true)
                 .init();
 
         final ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar2);
         pb.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+        etEmail = (EditText) findViewById(R.id.et_email_login);
+        etPass = (EditText) findViewById(R.id.et_pass_login);
+        setCheck(LogInActivity.this,etEmail,etPass);
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        try {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }
+        catch (DatabaseException ex){
+
+        }
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -68,9 +85,6 @@ public class LogInActivity extends AppCompatActivity {
 
                             EditText etEmail = (EditText) findViewById(R.id.et_email_login);
                             EditText etPass = (EditText) findViewById(R.id.et_pass_login);
-
-                            etEmail.setText("");
-                            etPass.setText("");
 
                             Intent intent = new Intent(LogInActivity.this, MainActivity.class);
                             startActivityForResult(intent, 2);
@@ -97,20 +111,9 @@ public class LogInActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText etEmail = (EditText) findViewById(R.id.et_email_login);
-                EditText etPass = (EditText) findViewById(R.id.et_pass_login);
+                if(check(LogInActivity.this,etEmail,etPass))return;
                 String email = etEmail.getText().toString();
                 String password = etPass.getText().toString();
-                if(email.length() == 0){
-                    Toast.makeText(LogInActivity.this, "Email is empty.",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(password.length() == 0){
-                    Toast.makeText(LogInActivity.this, "Password is empty.",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 try {
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(LogInActivity.this, new OnCompleteListener<AuthResult>() {
@@ -170,6 +173,8 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+        etEmail.setText("");
+        etPass.setText("");
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
@@ -180,5 +185,32 @@ public class LogInActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+    public static boolean check(Context context,TextView... tvs){
+        boolean tmp = false;
+        for (TextView tv:tvs) {
+            if (tv.length() == 0) {
+                tv.getBackground().mutate().setColorFilter(context.getResources().getColor(R.color.your_color), PorterDuff.Mode.SRC_ATOP);
+                tmp = true;
+            } else {
+                tv.getBackground().mutate().setColorFilter(context.getResources().getColor(R.color.your_color2), PorterDuff.Mode.SRC_ATOP);
+            }
+        }
+        return tmp;
+    }
+    public static void setCheck(final Context context, TextView... tvs){
+        for (final TextView tv:tvs) {
+            tv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus)return;
+                    if(tv.length() == 0){
+                        tv.getBackground().mutate().setColorFilter(context.getResources().getColor(R.color.your_color), PorterDuff.Mode.SRC_ATOP);
+                    }else{
+                        tv.getBackground().mutate().setColorFilter(context.getResources().getColor(R.color.your_color2), PorterDuff.Mode.SRC_ATOP);
+                    }
+                }
+            });
+        }
     }
 }

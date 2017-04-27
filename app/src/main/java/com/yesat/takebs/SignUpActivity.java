@@ -1,7 +1,5 @@
 package com.yesat.takebs;
 
-import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,25 +12,17 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
-import com.yesat.takebs.support.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,11 +31,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+import com.yesat.takebs.support.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import static com.yesat.takebs.LogInActivity.check;
+import static com.yesat.takebs.LogInActivity.setCheck;
 
 public class SignUpActivity extends AppCompatActivity {
     private static final int LOAD_IMAGE_RESULTS = 10;
@@ -137,23 +136,8 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
         // -----------------------------------------------------------------------------------------
-        View.OnFocusChangeListener myl = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                EditText editText = (EditText) v;
-                if(editText.getText().length()==0 && !hasFocus){
-                    editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color), PorterDuff.Mode.SRC_ATOP);
-                }
-                else{
-                    editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.your_color2), PorterDuff.Mode.SRC_ATOP);
-                }
-            }
-        };
 
-        email.setOnFocusChangeListener(myl);
-        pass.setOnFocusChangeListener(myl);
-        pass2.setOnFocusChangeListener(myl);
-        user.setOnFocusChangeListener(myl);
+        setCheck(SignUpActivity.this,email,pass,pass2,user);
 
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -206,8 +190,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
     private void signUp(){
 
-        if(email.length()==0 || pass.length()==0 || pass2.length()==0 || user.length()==0){
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+        if(check(SignUpActivity.this,email,pass,pass2,user)){
+            Toast.makeText(this, "Fill fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -215,6 +199,7 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Passwords are not same", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         String email_s  = email.getText().toString();
         String pass_s = pass.getText().toString();

@@ -57,8 +57,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
                 ImageView imageView = (ImageView) findViewById(R.id.pro_ava);
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageReference = storage.getReferenceFromUrl(user.profileImage);
                 try {
+                    StorageReference storageReference = storage.getReferenceFromUrl(user.profileImage);
                     Glide.with(UserInfoActivity.this)
                             .using(new FirebaseImageLoader())
                             .load(storageReference)

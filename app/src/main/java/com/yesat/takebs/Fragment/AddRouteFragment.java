@@ -227,7 +227,7 @@ public class AddRouteFragment extends Fragment {
             switch (v.getId()){
                 case R.id.type_0:
                     vType_0.setImageResource(R.drawable.airplane_filled);
-                    transport = "Airport";
+                    transport = "Airplane";
                     break;
                 case R.id.type_1:
                     vType_1.setImageResource(R.drawable.ship_filled);

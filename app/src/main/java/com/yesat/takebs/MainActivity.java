@@ -7,21 +7,23 @@ import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import com.yesat.takebs.Fragment.*;
+import com.onesignal.OSNotification;
+import com.onesignal.OneSignal;
+import com.yesat.takebs.Fragment.AddRouteFragment;
+import com.yesat.takebs.Fragment.ChatFragment;
+import com.yesat.takebs.Fragment.FavouritesFragment;
+import com.yesat.takebs.Fragment.ProfileFragment;
+import com.yesat.takebs.Fragment.RoutesFragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        OneSignal.clearOneSignalNotifications();
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         bottom = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 bottom.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottom.getMenu().getItem(position);
                 setTitle(bottom.getMenu().getItem(position).getTitle());
+
             }
 
             @Override
@@ -75,8 +80,29 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+//        OneSignal.startInit(this)
+//                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.None)
+//                .setNotificationReceivedHandler(new OneSignal.NotificationReceivedHandler() {
+//                    @Override
+//                    public void notificationReceived(OSNotification notification) {
+//
+//                    }
+//                })
+//                .autoPromptLocation(true)
+//                .init();
+
+
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        OneSignal.clearOneSignalNotifications();
+    }
+
     private void setupViewPager(ViewPager viewPager) {
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new RoutesFragment(), R.id.bnv_i1);
         adapter.addFragment(new FavouritesFragment(), R.id.bnv_i2);
@@ -101,6 +127,9 @@ public class MainActivity extends AppCompatActivity {
                 //noinspection RestrictedApi
                 item.setChecked(item.getItemData().isChecked());
             }
+            BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(3);
+
+
         } catch (NoSuchFieldException e) {
             Log.e(TAG, "Unable to get shift mode field", e);
         } catch (IllegalAccessException e) {
@@ -110,8 +139,9 @@ public class MainActivity extends AppCompatActivity {
 
     public class ViewPagerAdapter extends FragmentStatePagerAdapter implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-        private final List<Fragment> mFragmentList = new ArrayList<>();
+
         private final HashMap<Integer,Integer> mFragmentHash = new HashMap<>();
+        private final List<Fragment> mFragmentList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -190,9 +220,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             mKeyboardVisible = isKeyboardNowVisible;
+
         }
     };
-
 
     private void onKeyboardShown() {
         bottom.setVisibility(View.GONE);

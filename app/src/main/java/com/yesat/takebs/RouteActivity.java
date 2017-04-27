@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import com.yesat.takebs.support.Chat;
 import com.yesat.takebs.support.ChatPerson;
 import com.yesat.takebs.support.Route;
+import com.yesat.takebs.support.Route2;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -95,7 +96,8 @@ public class RouteActivity extends AppCompatActivity {
                 setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mDatabase.child("favourites").child(mAuth.getCurrentUser().getUid()).push().setValue(route);
+                        Route2 r = route.toRoute2();
+                        mDatabase.child("favourites").child(mAuth.getCurrentUser().getUid()).push().setValue(r);
                         AlertDialog.Builder builder = new AlertDialog.Builder(RouteActivity.this);
                         builder.setMessage("Route added to favourites")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

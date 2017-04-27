@@ -8,8 +8,8 @@ android {
         multiDexEnabled true
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 6
-        versionName "2.1"
+        versionCode 8
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [onesignal_app_id               : "d747cb18-a720-4e7e-9c5b-b25473db9412",
                                 onesignal_google_project_number: "334290952627"]

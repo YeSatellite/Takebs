@@ -37,5 +37,18 @@ public class Route implements Serializable {
         this.uid = uid;
         this.url = url;
     }
+
+    public boolean have(String filter) {
+        return (fromCity.toLowerCase().contains(filter) ||
+                toCity.toLowerCase().contains(filter) ||
+                date.toLowerCase().contains(filter) ||
+                contactNumber.toLowerCase().contains(filter) ||
+                note.toLowerCase().contains(filter) ||
+                username.toLowerCase().contains(filter));
+    }
+
+    public Route2 toRoute2() {
+        return new Route2(fromCity+" - "+toCity,date,time,shippingCost,contactNumber,deliveryMethod,note,username,uid,url);
+    }
 }
 
