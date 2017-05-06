@@ -177,7 +177,7 @@ public class AddRouteFragment extends Fragment {
                                 vCost.getText().toString().length()==0?"-":vCost.getText().toString(),
                                 vContact.getText().toString().length()==0?"-":vContact.getText().toString(),
                                 transport,
-                                vAbout.getText().toString(),
+                                vAbout.getText().toString().length()==0?"-":vAbout.getText().toString(),
                                 selectMethod,
                                 u.username,
                                 user.getUid(),

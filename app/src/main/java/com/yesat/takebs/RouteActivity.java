@@ -107,7 +107,7 @@ public class RouteActivity extends AppCompatActivity {
                         Route2 r = route.toRoute2();
                         mDatabase.child("favourites").child(mAuth.getCurrentUser().getUid()).push().setValue(r);
                         AlertDialog.Builder builder = new AlertDialog.Builder(RouteActivity.this);
-                        builder.setMessage("Route added to favourites")
+                        builder.setMessage("Route added to favorites")
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                     }
@@ -144,7 +144,7 @@ public class RouteActivity extends AppCompatActivity {
                                 Chat chat = new Chat(myUid,text,time,target_uid);
                                 mDatabase.child("message").child(ref.getKey()).setValue(chat);
                                 Intent i = new Intent(RouteActivity.this, ChatActivity.class);
-                                i.putExtra("chat",new ChatPerson(target_uid,""));
+                                i.putExtra("chat",new ChatPerson(target_uid,"",0));
                                 startActivity(i);
                                 mDatabase.child("users").child(target_uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override

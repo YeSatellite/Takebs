@@ -105,7 +105,7 @@
         android:layout_height="35dp"
         android:background="?attr/editTextBackground"
         android:gravity="center_vertical"
-        android:hint="Data of birth"
+        android:hint="Date of birth"
         android:paddingBottom="0dp"
         android:paddingTop="0dp"
         android:textAppearance="?android:attr/textAppearanceMediumInverse"

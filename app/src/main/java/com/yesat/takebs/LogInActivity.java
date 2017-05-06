@@ -66,7 +66,7 @@ public class LogInActivity extends AppCompatActivity {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         }
         catch (DatabaseException ex){
-
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -118,11 +118,9 @@ public class LogInActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     login.setText("Login");
                                     pb.setVisibility(View.INVISIBLE);
-                                    Log.d(TAG,"dismissed");
-                                    Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
                                     if (!task.isSuccessful()) {
                                         Log.w(TAG, "signInWithEmail", task.getException());
-                                        Toast.makeText(LogInActivity.this, "Authentication failed.",
+                                        Toast.makeText(LogInActivity.this, task.getException().getMessage(),
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }

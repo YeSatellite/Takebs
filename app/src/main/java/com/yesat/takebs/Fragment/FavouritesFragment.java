@@ -235,7 +235,7 @@ public class FavouritesFragment extends Fragment {
     }
 
     public void filter(String query) {
-        filter = query;
+        filter = query.toLowerCase();
         mDatabase.child("favourites").
                 child(mAuth.getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {

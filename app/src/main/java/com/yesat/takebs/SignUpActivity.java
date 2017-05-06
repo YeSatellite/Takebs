@@ -229,7 +229,7 @@ public class SignUpActivity extends AppCompatActivity {
             pb.setVisibility(View.VISIBLE);
             singUp.setText("");
         } catch (IllegalArgumentException e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             pb.setVisibility(View.INVISIBLE);
             singUp.setText("Sign up");
         }

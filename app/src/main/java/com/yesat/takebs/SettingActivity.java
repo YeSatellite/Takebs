@@ -107,7 +107,7 @@ public class SettingActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
                 final DatePicker picker = new DatePicker(SettingActivity.this);
 
-                builder.setTitle("Data of birth");
+                builder.setTitle("DOB");
                 builder.setView(picker);
                 builder.setNegativeButton("Cancel", null);
                 builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
